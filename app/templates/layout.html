@@ -46,12 +46,27 @@
                 <a class="nav-item nav-link" href="{{ url_for('friends') }}">Friends</a>
 
                 <a class="nav-item nav-link disabled" href="#">Disabled</a>
-                <div style="text-align:right;">
-                    <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-                </div>
+
             </div>
         </div>
+        <hr>
+        <br>
+        <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+            <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+        </div> -->
+        <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+
     </nav>
+    <hr>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <ul>
+        {% for message in messages %}
+        <li>{{ message }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+    {% endwith %}
 
     <div class="container">
         {% block content %}
