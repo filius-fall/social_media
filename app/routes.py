@@ -1,17 +1,23 @@
-from flask import render_template, flash, redirect
+from flask import render_template, flash, redirect, request
 from flask.helpers import url_for
 from flask_login.utils import current_user, login_user
 from werkzeug.security import check_password_hash
 from . import app
 from .forms import LoginForm
 from .models import User
-from flask_login import logout_user
+from flask_login import logout_user, login_required
+from werkzeug.urls import url_parse
 
 
 @app.route("/")
 @app.route("/home")
 def home():
-    return render_template("home.html", title="HOME")
+    user = {"username": "Miguel"}
+    posts = [
+        {"author": {"username": "sree"}, "body": "Beautiful day in Anantapur!"},
+        {"author": {"username": "ram"}, "body": "Batman is the best superhero!"},
+    ]
+    return render_template("home.html", title="HOME", posts=posts)
 
 
 @app.route("/about")
@@ -25,6 +31,7 @@ def explore():
 
 
 @app.route("/friends")
+@login_required
 def friends():
     return render_template("friends.html", title="Friends")
 
@@ -47,8 +54,11 @@ def login():
 
             flash("Username or Password is incorrect")
             return redirect(url_for("login"))
-        login_user(user, remember=remember_me.data)
-        return redirect("/home")
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get("next")
+        if not next_page or url_parse(next_page).netloc != "":
+            next_page = url_for("home")
+        return redirect(next_page)
     return render_template("login.html", title="Login", form=form)
 
 
