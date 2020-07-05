@@ -5,6 +5,7 @@ from werkzeug.security import check_password_hash
 from . import app
 from .forms import LoginForm
 from .models import User
+from flask_login import logout_user
 
 
 @app.route("/")
@@ -50,3 +51,8 @@ def login():
         return redirect("/home")
     return render_template("login.html", title="Login", form=form)
 
+
+@app.route("/logout")
+def logout():
+    logout_user()
+    return redirect(url_for("home"))
