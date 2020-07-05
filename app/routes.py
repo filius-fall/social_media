@@ -1,6 +1,10 @@
 from flask import render_template, flash, redirect
+from flask.helpers import url_for
+from flask_login.utils import current_user, login_user
+from werkzeug.security import check_password_hash
 from . import app
 from .forms import LoginForm
+from .models import User
 
 
 @app.route("/")
@@ -31,13 +35,18 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
+
     form = LoginForm()
     if form.validate_on_submit():
-        flash(
-            "Login requested for user{}, remember_me={}".format(
-                form.username.data, form.remember_me.data
-            )
-        )
+        flash("Login requested for user {}".format(form.username.data))
+        user = User.query.filter_by(username=form.username.data).first()
+        if user is None or not user.check_password(form.password.data):
+
+            flash("Username or Password is incorrect")
+            return redirect(url_for("login"))
+        login_user(user, remember=remember_me.data)
         return redirect("/home")
     return render_template("login.html", title="Login", form=form)
 
