@@ -1,9 +1,11 @@
 from flask import render_template, flash, redirect, request
 from flask.helpers import url_for
+from flask.signals import request_tearing_down
 from flask_login.utils import current_user, login_user
 from werkzeug.security import check_password_hash
-from . import app
-from .forms import LoginForm
+from wtforms.validators import url
+from . import app, db
+from .forms import LoginForm, RegistrationForm
 from .models import User
 from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
@@ -36,9 +38,19 @@ def friends():
     return render_template("friends.html", title="Friends")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html", title="Registration")
+    if current_user.is_authenticated:
+        redirect(url_for("home"))
+    form = RegistrationForm()
+    if form.validate_on_submit():
+        user = User(username=form.username.data, email=form.email.data)
+        user.set_password(form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        flash("Congrats! You have been registered")
+        return redirect(url_for("login"))
+    return render_template("register.html", title="Registration", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
