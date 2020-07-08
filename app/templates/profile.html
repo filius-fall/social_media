@@ -1,0 +1,9 @@
+{% extends "layout.html" %} {% block content %} {% for post in posts %}
+<p>{{ post.user }}</p>
+says:
+
+<div class="container-fluid">
+  {{ post.body }}
+</div>
+
+{% endfor %} {% endblock %}

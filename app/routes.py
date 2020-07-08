@@ -1,3 +1,4 @@
+from operator import or_
 from flask import render_template, flash, redirect, request
 from flask.helpers import url_for
 from flask.signals import request_tearing_down
@@ -32,25 +33,48 @@ def explore():
     return render_template("explore.html", title="explore")
 
 
+@app.route("/profile/<username>")
+@login_required
+def profile(username):
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = [{"author": user, "body": "Test 01"}, {"author": user, "body": "Test 02"}]
+    return render_template("profile.html", user=user, posts=posts)
+
+
 @app.route("/friends")
 @login_required
 def friends():
     return render_template("friends.html", title="Friends")
 
 
+# @app.route("/register", methods=["GET", "POST"])
+# def register():
+#     if current_user.is_authenticated:
+#         redirect(url_for("home"))
+#     form = RegistrationForm()
+#     if form.validate_on_submit():
+#         user = User(username=form.username.data, email=form.email.data)
+#         user.set_password(form.password.data)
+#         db.session.add(user)
+#         db.session.commit()
+#         flash("Congrats! You have been registered")
+#         return redirect(url_for("login"))
+#     return render_template("register.html", title="Registration", form=form)
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
-        redirect(url_for("home"))
+        return redirect(url_for("home"))
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash("Congrats! You have been registered")
+        flash("Congratulations, you are now a registered user!")
         return redirect(url_for("login"))
-    return render_template("register.html", title="Registration", form=form)
+    return render_template("register.html", title="Register", form=form)
 
 
 @app.route("/login", methods=["GET", "POST"])
