@@ -5,7 +5,7 @@ from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
 from .models import User
 
 
-# This is how You cab mess up a code observe EqualTo() in both registration fields
+# This is how You cab mess up a code observe EqualTo() in both registration fields7
 
 # class RegistrationForm(FlaskForm):
 #     username = StringField("Username", validators=[DataRequired()])
