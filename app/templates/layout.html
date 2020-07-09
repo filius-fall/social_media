@@ -1,83 +1,111 @@
 <html>
-
-<head>
+  <head>
     <title>
-        {% if title %}
-        {{ title }}
-        {% else %}
-        Social Media
-        {% endif %}
+      {% if title %} {{ title }} {% else %} Social Media {% endif %}
     </title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="google-site-verification" content="rH76Yw6Q7ynVywb8ZtG55I8QYGWrfbRChQYVbaLI2f8" />
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta
+      name="google-site-verification"
+      content="rH76Yw6Q7ynVywb8ZtG55I8QYGWrfbRChQYVbaLI2f8"
+    />
 
     <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
                     integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-grid.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-grid.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap-reboot.min.css') }}">
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap-grid.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap-grid.min.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap-reboot.css') }}"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static', filename='css/bootstrap-reboot.min.css') }}"
+    />
 
     <script src="{{ url_for('static', filename='js/bootstrap.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+  </head>
 
-</head>
-
-
-<body>
-
+  <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{{ url_for('home') }}">Social Media</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-                <a class="nav-item nav-link active" href="{{ url_for('home') }}">Home <span
-                        class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="{{ url_for('explore') }}">Explore</a>
-                <a class="nav-item nav-link" href="{{ url_for('friends') }}">Friends</a>
+      <a class="navbar-brand" href="{{ url_for('home') }}">Social Media</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-item nav-link active" href="{{ url_for('home') }}"
+            >Home <span class="sr-only">(current)</span></a
+          >
+          <a class="nav-item nav-link" href="{{ url_for('explore') }}"
+            >Explore</a
+          >
+          <a class="nav-item nav-link" href="{{ url_for('friends') }}"
+            >Friends</a
+          >
 
-                <a class="nav-item nav-link disabled" href="#">Disabled</a>
-
-            </div>
+          <a class="nav-item nav-link disabled" href="#">Disabled</a>
         </div>
-        <hr>
-        <br>
-        <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      </div>
+      <hr />
+      <br />
+      <!-- <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
         </div> -->
-        {% if current_user.is_anonymous %}
-        <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
-        <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
-        {% else %}
-        <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
-        {% endif %}
-
+      {% if current_user.is_anonymous %}
+      <a class="nav-item nav-link" href="{{ url_for('login') }}">Login</a>
+      <a class="nav-item nav-link" href="{{ url_for('register') }}">Register</a>
+      {% else %}
+      <a class="nav-item nav-link" href="{{ url_for('profile', username=current_user.username) }}">Profile</a>
+      <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+      {% endif %}
     </nav>
-    <hr>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
+    <hr />
+    {% with messages = get_flashed_messages() %} {% if messages %}
     <ul>
-        {% for message in messages %}
-        <li>{{ message }}</li>
-        {% endfor %}
+      {% for message in messages %}
+      <li>{{ message }}</li>
+      {% endfor %}
     </ul>
-    {% endif %}
-    {% endwith %}
+    {% endif %} {% endwith %}
 
     <div class="container">
-        {% block content %}
-        {% endblock %}
+      {% block content %} {% endblock %}
     </div>
-
-</body>
-
+  </body>
 </html>

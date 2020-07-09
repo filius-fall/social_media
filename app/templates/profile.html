@@ -1,9 +1,10 @@
 {% extends "layout.html" %} {% block content %} {% for post in posts %}
-<p>{{ post.user }}</p>
-says:
 
 <div class="container-fluid">
-  {{ post.body }}
+  <h1>
+    <p>{{ post.author.username }}</p>
+  </h1>
+  says: {{ post.body }}
 </div>
 
 {% endfor %} {% endblock %}
