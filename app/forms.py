@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.recaptcha import validators
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, ValidationError, Email, EqualTo
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
+from wtforms.validators import DataRequired, Length, ValidationError, Email, EqualTo
 from .models import User
 
 
@@ -54,3 +54,8 @@ class RegistrationForm(FlaskForm):
         if user is not None:
             raise ValidationError("Please use a different email address.")
 
+
+class EditProfileForm(FlaskForm):
+    username = StringField('Username',validators=[DataRequired()])
+    about_me = TextAreaField("Aboout Me",validators=[Length(min=0,max=150)])
+    submit=SubmitField('Submit')
