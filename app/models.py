@@ -6,6 +6,11 @@ from app import login
 from hashlib import md5
 
 
+followers = db.Table('followers',
+    db.Column('follower_id', db.Integer, db.ForeignKey('user.id')),
+    db.Column('followed_id', db.Integer, db.ForeignKey('user.id'))
+)
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
@@ -13,6 +18,19 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(60), nullable=False)
     about_me=db.Column(db.String(200))
     posts = db.relationship("Post", backref="author", lazy=True)
+
+    # followed = db.relationship(
+    #     'User',secondary=followers,
+    #     primaryjoin=(followers.c.follower_id==id),
+    #     secondaryjoin=(followers.c.followed_id==id)
+    #     backref=db.backref('followers',lazy='dynamic'),lazy='dynamic'
+    # )
+
+    followed = db.relationship(
+        'User', secondary=followers,
+        primaryjoin=(followers.c.follower_id == id),
+        secondaryjoin=(followers.c.followed_id == id),
+        backref=db.backref('followers', lazy='dynamic'), lazy='dynamic')
 
     def __repr__(self):
         return f"User('{self.username}', '{self.email}')"
@@ -42,4 +60,6 @@ class Post(db.Model):
 
     def __repr__(self):
         return f"Post('{self.content}', '{self.timestamp}')"
+
+
 
