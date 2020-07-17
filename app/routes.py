@@ -6,21 +6,27 @@ from flask_login.utils import current_user, login_user
 from werkzeug.security import check_password_hash
 from wtforms.validators import url
 from . import app, db
-from .forms import LoginForm, RegistrationForm,EditProfileForm,EmptyForm
-from .models import User
+from .forms import LoginForm, RegistrationForm,EditProfileForm,EmptyForm,PostForm
+from .models import User,Post
 from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
 
 
 @app.route("/")
-@app.route("/home")
+@app.route("/home",methods=['GET','Post'])
 def home():
-    user = {"username": "Miguel"}
+    form=PostForm()
+    if form.validate_on_submit():
+        post=Post(content=form.post.data,author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('You have succesfully added some Bullshit on Internet')
+        return redirect(url_for('home'))
     posts = [
         {"author": {"username": "sree"}, "body": "Beautiful day in Anantapur!"},
         {"author": {"username": "ram"}, "body": "Batman is the best superhero!"},
     ]
-    return render_template("home.html", title="HOME", posts=posts)
+    return render_template("home.html", title="HOME", posts=posts,form=form)
 
 
 @app.route("/about")

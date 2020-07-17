@@ -63,3 +63,8 @@ class EditProfileForm(FlaskForm):
 
 class EmptyForm(FlaskForm):
     submit=SubmitField('submit')
+
+
+class PostForm(FlaskForm):
+    post=TextAreaField('Add bullshit to internet',validators=[DataRequired(),Length(min=2,max=100)])
+    submit=SubmitField('Post')
