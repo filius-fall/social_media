@@ -6,7 +6,7 @@ from flask_login.utils import current_user, login_user
 from werkzeug.security import check_password_hash
 from wtforms.validators import url
 from . import app, db
-from .forms import LoginForm, RegistrationForm,EditProfileForm
+from .forms import LoginForm, RegistrationForm,EditProfileForm,EmptyForm
 from .models import User
 from flask_login import logout_user, login_required
 from werkzeug.urls import url_parse
@@ -36,9 +36,10 @@ def explore():
 @app.route("/profile/<username>")
 @login_required
 def profile(username):
+    form=EmptyForm()
     user = User.query.filter_by(username=username).first_or_404()
     posts = [{"author": user, "body": "Test 01"}, {"author": user, "body": "Test 02"}]
-    return render_template("profile.html", user=user, posts=posts)
+    return render_template("profile.html", user=user, posts=posts,form=form)
 
 
 @app.route("/friends")
@@ -119,3 +120,84 @@ def edit_profile():
         form.username.data = current_user.username
         form.about_me.data = current_user.about_me
     return render_template('edit_profile.html',form=form)
+
+
+# @app.route('/follow/<username>')
+# @login_required
+# def follow(username):
+#     form=EmptyForm()
+#     if form.validate_on_submit():
+#         user=User.query.filter_by(username=username).first()
+#         if user is none:
+#             flash('User {} not found'.format(username))
+#             return redirect(url_for('home'))
+#         if user==current_user:
+#             flash('You cant follow yourself')
+#             return redirect(url_for('profile',username=username))
+#         current_user.follow(user)
+#         db.session.commit()
+#         flash('YOu are now following {}'.format(username))
+#         return redirect(url_for('profile',username=username))
+#     else:
+#         return redirect(url_for('home'))
+
+
+# @app.route('/unfollow/<usernmae>')
+# @login_required
+# def unfollow(username):
+#     form=EmptyForm()
+#     if form.validate_on_submit():
+#         user=User.query.filter_by(username=username).first()
+#         if user is None:
+#             flash('User Not found')
+#             return redirect(url_for('home'))
+#         if user==current_user:
+#             flash('You cannot unfollow yourself')
+#             return redirect(url_for('profile'),username=username)
+#         current_user.unfollow(user)
+#         db.session.commit()
+#         flash('You have now succesfully unfollowed {}'.format(username))
+#         return redirect(url_for('profile',username=username))
+#     else:
+#         return redirect(url_for('home'))
+
+
+
+@app.route('/follow/<username>', methods=['POST'])
+@login_required
+def follow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username))
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You cannot follow yourself!')
+            return redirect(url_for('profile', username=username))
+        current_user.follow(user)
+        db.session.commit()
+        flash('You are following {}!'.format(username))
+        return redirect(url_for('profile', username=username))
+    else:
+        return redirect(url_for('index'))
+
+
+@app.route('/unfollow/<username>', methods=['POST'])
+@login_required
+def unfollow(username):
+    form = EmptyForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(username=username).first()
+        if user is None:
+            flash('User {} not found.'.format(username))
+            return redirect(url_for('index'))
+        if user == current_user:
+            flash('You cannot unfollow yourself!')
+            return redirect(url_for('profile', username=username))
+        current_user.unfollow(user)
+        db.session.commit()
+        flash('You are not following {}.'.format(username))
+        return redirect(url_for('profile', username=username))
+    else:
+        return redirect(url_for('index'))
