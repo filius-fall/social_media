@@ -14,6 +14,7 @@ from werkzeug.urls import url_parse
 
 @app.route("/")
 @app.route("/home",methods=['GET','Post'])
+@login_required
 def home():
     form=PostForm()
     if form.validate_on_submit():
@@ -22,10 +23,7 @@ def home():
         db.session.commit()
         flash('You have succesfully added some Bullshit on Internet')
         return redirect(url_for('home'))
-    posts = [
-        {"author": {"username": "sree"}, "body": "Beautiful day in Anantapur!"},
-        {"author": {"username": "ram"}, "body": "Batman is the best superhero!"},
-    ]
+    posts = current_user.followed_posts().all()
     return render_template("home.html", title="HOME", posts=posts,form=form)
 
 
@@ -36,7 +34,8 @@ def about():
 
 @app.route("/explore")
 def explore():
-    return render_template("explore.html", title="explore")
+    posts=Post.query.order_by(Post.timestamp.desc()).all()
+    return render_template("home.html", title="explore",posts=posts)
 
 
 @app.route("/profile/<username>")

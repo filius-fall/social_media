@@ -67,4 +67,4 @@ class EmptyForm(FlaskForm):
 
 class PostForm(FlaskForm):
     post=TextAreaField('Add bullshit to internet',validators=[DataRequired(),Length(min=2,max=100)])
-    submit=SubmitField('Post')
+    submit=SubmitField('Post21')

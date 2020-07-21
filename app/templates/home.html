@@ -3,6 +3,7 @@
 {% block content %}
 
     <h1>Hi, {{ current_user.username }}!</h1>
+    {% if form %}
     <form action="" method="POST">
         {{ form.hidden_tag() }}
         <p>
@@ -14,9 +15,10 @@
         </p>
         <p>{{ form.submit() }}</p>
     </form>
+    {% endif %}
     {% for post in posts %}
     <div class="container">
-        {{ post.author.username }} says: {{ post.content }}
+        {% include '_post.html' %}
     </div>
     {% endfor %}
 

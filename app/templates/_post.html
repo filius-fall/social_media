@@ -1,9 +1,9 @@
-<div class="card-body" style="margin-bottom: ;">
-    <table>
-      <tr valign="top">
-        <td><img src="{{ post.author.avatar(36) }}"></td>
-        <td><h3 style="color: blue;"><p>{{ post.author.username }}</p></h3></td>
-        <td><br>says: {{ post.body }}</td>
-      </tr>
-    </table>
-</div>
+<article class="all-posts" style="margin: 5% ;padding: 5px;">
+
+    <p style="touch-action: cross-slide-y;">
+    <img src="{{ post.author.avatar(36) }}",style="border-radius:2px">
+    <a href="{{ url_for('profile',username=post.author.username) }}" style="font-size: 25px;text-indent: 50px;">{{ post.author.username }}</a>
+    </p>
+    <hr>
+    <p style="align-self: center;text-indent: 10px;">{{ post.content }}</p>
+</article>
